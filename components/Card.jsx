@@ -6,7 +6,10 @@ export default function Card(props) {
   var now = new Date(props.publishedDate) || new Date();
 
   return (
-    <div className="relative flex w-[400px] bg-cardBg hover:shadow-lg shadow-[#5ce501]">
+    <div
+      id={props.id}
+      className="relative flex w-[400px] bg-cardBg hover:shadow-lg shadow-[#5ce501]"
+    >
       <Link href={props.bookLink} className="flex">
         <Image
           src={`${props.imgSrc}`}

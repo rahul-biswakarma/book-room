@@ -8,6 +8,10 @@ export default function Card(props) {
     pubDate = new Date(props.publishedDate[0]) || new Date();
   else pubDate = new Date();
 
+  function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+  }
+
   return (
     <div
       key={props.cardId}
@@ -50,7 +54,9 @@ export default function Card(props) {
             )}
           </div>
           <div>
-            {pubDate ? dateFormat(pubDate, "mmm dS, yyyy") : "21/02/21"}
+            {isValidDate(pubDate)
+              ? dateFormat(pubDate, "mmm dS, yyyy")
+              : "21/02/21"}
           </div>
         </div>
         <Link

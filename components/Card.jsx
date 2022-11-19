@@ -42,7 +42,9 @@ export default function Card(props) {
             By{" "}
             {props.authors == undefined
               ? "unknown"
-              : props.authors.map((author) => author)}
+              : props.authors.map((author) => {
+                  return <div key={author}>{author}</div>;
+                })}
           </div>
           <div>{dateFormat(pubDate, "mmm dS, yyyy")}</div>
         </div>

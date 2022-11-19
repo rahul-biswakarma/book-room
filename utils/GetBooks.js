@@ -18,7 +18,7 @@ export default function useBookSearch(query, pageNumber, setTotalCount) {
     axios({
       method: "GET",
       url: "http://openlibrary.org/search.json",
-      params: { q: query, page: pageNumber },
+      params: { q: query, page: pageNumber, limit: 10 },
       cancelToken: new axios.CancelToken((c) => (axiosCancelToken = c)),
     })
       .then((res) => {
@@ -39,7 +39,7 @@ export default function useBookSearch(query, pageNumber, setTotalCount) {
           ];
         });
         setHasMore(res.data.docs.length > 0);
-        setTotalCount(res.data.docs.length);
+        setTotalCount((prevData) => res.data.docs.length + prevData);
         setLoading(false);
       })
       .catch((e) => {

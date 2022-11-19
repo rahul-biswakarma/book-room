@@ -16,25 +16,27 @@ export default function Card(props) {
     <div
       key={props.cardId}
       id={props.cardId}
-      className="relative flex w-[400px] bg-cardBg hover:shadow-lg shadow-[#5ce501]"
+      className="relative grid grid-cols-[40%_60%] w-[400px] bg-cardBg hover:shadow-lg shadow-[#5ce501]"
     >
-      {props.coverId ? (
-        <Image
-          src={`https://covers.openlibrary.org/b/id/${props.coverId}-M.jpg`}
-          className="object-scale-down h-[250px]"
-          alt={props.title}
-          width={250}
-          height={400}
-        />
-      ) : (
-        <Image
-          src={`https://www.arlanandrews.com/wp-content/uploads/2020/10/book-cover-generic.jpg`}
-          width={200}
-          height={400}
-          className="object-scale-down h-[250px]"
-          alt={props.title}
-        />
-      )}
+      <div className="overflow-hidden flex justify-center items-center bg-black">
+        {props.coverId ? (
+          <Image
+            src={`https://covers.openlibrary.org/b/id/${props.coverId}-M.jpg`}
+            className="object-scale-down w-full h-full"
+            alt={props.title}
+            width={250}
+            height={400}
+          />
+        ) : (
+          <Image
+            src={`https://www.arlanandrews.com/wp-content/uploads/2020/10/book-cover-generic.jpg`}
+            width={200}
+            height={400}
+            className="object-scale-down h-[250px] max-w-[300px]"
+            alt={props.title}
+          />
+        )}
+      </div>
       <div className="flex flex-col justify-between h-[100% ] w-full">
         <div className="p-[1rem] text-cardTextSecondary">
           <Link

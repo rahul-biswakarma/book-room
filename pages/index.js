@@ -35,7 +35,7 @@ export default function App() {
               <div ref={lastBookElementRef}>
                 <Card
                   cardId={index}
-                  key={index}
+                  key={`${index}${pageNumber}`}
                   title={book.title}
                   authors={book.author}
                   coverId={book.coverId}
@@ -48,7 +48,7 @@ export default function App() {
             return (
               <Card
                 cardId={index}
-                key={index}
+                key={`${index}${pageNumber}`}
                 title={book.title}
                 authors={book.authors}
                 coverId={book.coverId}

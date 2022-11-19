@@ -10,6 +10,7 @@ export default function Card(props) {
 
   return (
     <div
+      key={props.cardId}
       id={props.cardId}
       className="relative flex w-[400px] bg-cardBg hover:shadow-lg shadow-[#5ce501]"
     >
@@ -40,16 +41,22 @@ export default function Card(props) {
           </Link>
           <div>
             By{" "}
-            {props.authors == undefined
-              ? "unknown"
-              : props.authors.map((author) => {
-                  return <div key={author}>{author}</div>;
-                })}
+            {props.authors == undefined ? (
+              "unknown"
+            ) : (
+              <span key={`${props.authors[0]}0${props.cardId}`}>
+                {props.authors[0]}
+              </span>
+            )}
           </div>
-          <div>{dateFormat(pubDate, "mmm dS, yyyy")}</div>
+          <div>
+            {pubDate ? dateFormat(pubDate, "mmm dS, yyyy") : "21/02/21"}
+          </div>
         </div>
         <Link
-          href={""}
+          href={`https://www.amazon.in/s?srs=${
+            props.amazonId ? props.amazonId[0] : "newBook"
+          }`}
           alt={props.title}
           className="w-full p-[1rem] bg-cardButtonBg text-cardButtonText"
           target={"_blank"}

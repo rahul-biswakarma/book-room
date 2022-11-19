@@ -39,7 +39,7 @@ export default function useBookSearch(query, pageNumber, setTotalCount) {
           ];
         });
         setHasMore(res.data.docs.length > 0);
-        setTotalCount((prevData) => res.data.docs.length + prevData);
+        setTotalCount(res.data.docs.length * pageNumber);
         setLoading(false);
       })
       .catch((e) => {

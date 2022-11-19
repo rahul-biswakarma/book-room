@@ -1,9 +1,16 @@
 import Link from "next/link";
 
-export default function Navbar({ query, setQuery, setPageNumber }) {
+export default function Navbar({
+  query,
+  setQuery,
+  setPageNumber,
+  setTotalCount,
+}) {
   function handleSearch(e) {
-    setQuery(e.target.value);
+    if (e.target.value != "") setQuery(e.target.value);
+    else setQuery("the");
     setPageNumber(1);
+    setTotalCount(0);
   }
   return (
     <div className="sticky top-[0px] left-[0px] w-full z-50">

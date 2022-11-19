@@ -32,7 +32,12 @@ export default function App() {
 
   return (
     <div className="min-h-[100vh]">
-      <Navbar setPageNumber={setPageNumber} setQuery={setQuery} query={query} />
+      <Navbar
+        setPageNumber={setPageNumber}
+        setQuery={setQuery}
+        query={query}
+        setTotalCount={setTotalCount}
+      />
       <div className="text-cardTextSecondary text-lg text-center p-[3rem]">
         Showing <span className="font-bold">{totalCount}</span> books
       </div>
@@ -67,8 +72,12 @@ export default function App() {
           }
         })}
       </div>
-      <div className="text-center p-[1rem]">{loading && "Loading..."}</div>
-      <div>{error && "Error"}</div>
+      <div className="text-center p-[1rem] font-bold text-cardTextSecondary ">
+        {loading && "Loading..."}
+      </div>
+      <div className="text-center p-[1rem] font-bold text-cardTextSecondary ">
+        {error && "Error"}
+      </div>
     </div>
   );
 }

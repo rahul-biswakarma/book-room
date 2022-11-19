@@ -32,7 +32,7 @@ export default function App() {
         {books.map((book, index) => {
           if (books.length === index + 1) {
             return (
-              <div ref={lastBookElementRef}>
+              <div ref={lastBookElementRef} key={`${index}${pageNumber}`}>
                 <Card
                   cardId={index}
                   key={`${index}${pageNumber}`}

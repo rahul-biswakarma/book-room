@@ -21,7 +21,6 @@ export default function Navbar({
 
         <div className="flex gap-[1rem] items-center w-full justify-end text-white/70">
           <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
           <div className="w-full max-w-[300px]">
             <input
               spellCheck="false"

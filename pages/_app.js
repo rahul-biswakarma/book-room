@@ -1,10 +1,8 @@
 import "../styles/globals.css";
-import Navbar from "/components/Navbar";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div className="bg-bodyBg">
-      <Navbar />
+    <div className="bg-bodyBg h-[full]">
       <Component {...pageProps} />
     </div>
   );

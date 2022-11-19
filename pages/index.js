@@ -1,97 +1,66 @@
-import { useEffect, useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
-import Card from "/components/Card.jsx";
-import { getAllBooks } from "/utils/GetBook";
+import Card from "/components/Card";
+import GetBooks from "/utils/GetBooks";
+import Navbar from "/components/Navbar";
 
-export default function Home() {
-  const [books, setBooks] = useState([]);
-  const [currCount, setCurrCount] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
+export default function App() {
+  const [query, setQuery] = useState("all");
   const [pageNumber, setPageNumber] = useState(1);
-  const [lastCard, setLastCard] = useState(8);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setLastCard(books.length - 1);
-      var myElement = document.getElementById(`card-${lastCard}`);
-      try {
-        var bounding = myElement.getBoundingClientRect();
+  const { books, hasMore, loading, error } = GetBooks(query, pageNumber);
 
-        if (
-          bounding.top >= 0 &&
-          bounding.left >= 0 &&
-          bounding.right <= window.innerWidth &&
-          bounding.bottom <= window.innerHeight
-        ) {
-          setPageNumber(pageNumber + 1);
-          setLastCard(books.length - 1);
+  const observer = useRef();
+  const lastBookElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNumber((prevPageNumber) => prevPageNumber + 1);
         }
-      } catch {}
-    };
-    // clean up code
-    window.removeEventListener("scroll", onScroll);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  });
-
-  useEffect(() => {
-    getAllBooks(pageNumber).then((data) => {
-      setBooks([]);
-      setCurrCount(data.currCount);
-      setTotalCount(data.totalCount);
-      data.body.map((book) => {
-        setBooks((prevBooks) => {
-          return [...new Set([...prevBooks, book])];
-        });
       });
-    });
-  }, [pageNumber]);
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
 
   return (
-    <>
-      <div className="text-cardTextSecondary text-lg text-center p-[3rem]">
-        Showing <span className="font-bold">{currCount}</span> out of{" "}
-        <span className="font-bold">{totalCount}</span> books
-      </div>
+    <div className="min-h-[100vh]">
+      <Navbar setPageNumber={setPageNumber} setQuery={setQuery} query={query} />
       <div className="flex gap-[2rem] flex-wrap justify-center items-center p-[3rem] bg-bodyBg">
-        {books.length > 0 ? (
-          books.map((book, index) => {
-            if (books.length === index + 1) {
-              return (
+        {books.map((book, index) => {
+          if (books.length === index + 1) {
+            return (
+              <div ref={lastBookElementRef}>
                 <Card
-                  id={`card-${index}`}
+                  cardId={index}
                   key={index}
-                  author={book.author}
                   title={book.title}
-                  publishedDate={book.updated_date}
-                  imgSrc={book.book_image}
-                  imgWidth={book.book_image_width}
-                  imgHeight={book.book_image_height}
-                  buyLink={book.amazon_product_url}
-                  bookLink={book.book_review_link}
+                  authors={book.author}
+                  coverId={book.coverId}
+                  publishedDate={book.publishedDate}
+                  amazonId={book.amazonId}
                 />
-              );
-            } else {
-              return (
-                <Card
-                  id={`card-${index}`}
-                  key={index}
-                  author={book.author}
-                  title={book.title}
-                  publishedDate={book.updated_date}
-                  imgSrc={book.book_image}
-                  imgWidth={book.book_image_width}
-                  imgHeight={book.book_image_height}
-                  buyLink={book.amazon_product_url}
-                  bookLink={book.book_review_link}
-                />
-              );
-            }
-          })
-        ) : (
-          <>Loading</>
-        )}
+              </div>
+            );
+          } else {
+            return (
+              <Card
+                cardId={index}
+                key={index}
+                title={book.title}
+                authors={book.authors}
+                coverId={book.coverId}
+                publishedDate={book.publishedDate}
+                amazonId={book.amazonId}
+              />
+            );
+          }
+        })}
       </div>
-    </>
+      <div className="text-center p-[1rem]">{loading && "Loading..."}</div>
+      <div>{error && "Error"}</div>
+    </div>
   );
 }

@@ -2,7 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["storage.googleapis.com"],
+    domains: [
+      "storage.googleapis.com",
+      "covers.openlibrary.org",
+      "www.arlanandrews.com",
+    ],
   },
 };
 

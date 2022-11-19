@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-export default function Navbar(props) {
+export default function Navbar({ query, setQuery, setPageNumber }) {
   function handleSearch(e) {
-    props.setQuery(e.target.value);
-    props.setPageNumber(1);
+    setQuery(e.target.value);
+    setPageNumber(1);
   }
   return (
     <div className="sticky top-[0px] left-[0px] w-full z-50">

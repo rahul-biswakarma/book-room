@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React, { useState, useRef, useCallback } from "react";
 
 import Card from "/components/Card";
@@ -5,7 +6,7 @@ import GetBooks from "/utils/GetBooks";
 import Navbar from "/components/Navbar";
 
 export default function App() {
-  const [query, setQuery] = useState("all");
+  const [query, setQuery] = useState("the");
   const [pageNumber, setPageNumber] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -32,6 +33,13 @@ export default function App() {
 
   return (
     <div className="min-h-[100vh]">
+      <Head>
+        <title>BookRoom</title>
+        <meta
+          name="description"
+          content="BookRoom is a simple library management web app that is built around openlibrary api"
+        />
+      </Head>
       <Navbar
         setPageNumber={setPageNumber}
         setQuery={setQuery}

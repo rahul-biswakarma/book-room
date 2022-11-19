@@ -7,8 +7,13 @@ import Navbar from "/components/Navbar";
 export default function App() {
   const [query, setQuery] = useState("all");
   const [pageNumber, setPageNumber] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const { books, hasMore, loading, error } = GetBooks(query, pageNumber);
+  const { books, hasMore, loading, error } = GetBooks(
+    query,
+    pageNumber,
+    setTotalCount
+  );
 
   const observer = useRef();
   const lastBookElementRef = useCallback(
@@ -28,6 +33,9 @@ export default function App() {
   return (
     <div className="min-h-[100vh]">
       <Navbar setPageNumber={setPageNumber} setQuery={setQuery} query={query} />
+      <div className="text-cardTextSecondary text-lg text-center p-[3rem]">
+        Showing <span className="font-bold">{totalCount}</span> books
+      </div>
       <div className="flex gap-[2rem] flex-wrap justify-center items-center p-[3rem] bg-bodyBg">
         {books.map((book, index) => {
           if (books.length === index + 1) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function useBookSearch(query, pageNumber) {
+export default function useBookSearch(query, pageNumber, setTotalCount) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [books, setBooks] = useState([]);
@@ -39,6 +39,7 @@ export default function useBookSearch(query, pageNumber) {
           ];
         });
         setHasMore(res.data.docs.length > 0);
+        setTotalCount(res.data.docs.length);
         setLoading(false);
       })
       .catch((e) => {

@@ -7,6 +7,7 @@ import GetBooks from "/utils/GetBooks";
 import Navbar from "/components/Navbar";
 import Filters from "/components/Filters";
 import VerifyAuthor from "/utils/verifyAuthor";
+import updateBookCount from "/utils/updateBookCount";
 import VerifyPublishedDates from "/utils/verifyPublishedDate";
 
 export default function App() {
@@ -107,13 +108,4 @@ export default function App() {
       </div>
     </div>
   );
-}
-
-function updateBookCount() {
-  setInterval(() => {
-    try {
-      document.getElementById("books-count").innerHTML =
-        document.getElementById("books-container").childElementCount;
-    } catch {}
-  }, 1000);
 }

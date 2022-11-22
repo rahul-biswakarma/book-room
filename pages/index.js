@@ -1,14 +1,18 @@
 import Head from "next/head";
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 
 import Card from "/components/Card";
+import Count from "/components/Count";
 import GetBooks from "/utils/GetBooks";
 import Navbar from "/components/Navbar";
+import Filters from "/components/Filters";
 import VerifyAuthor from "/utils/verifyAuthor";
+import VerifyPublishedDates from "/utils/verifyPublishedDate";
 
 export default function App() {
   const [query, setQuery] = useState("the");
   const [authorQuery, setAuthorQuery] = useState("");
+  const [dateQuery, setDateQuery] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -18,9 +22,9 @@ export default function App() {
     setTotalCount
   );
 
-  function handleAuthorQuery(e) {
-    setAuthorQuery(e.target.value);
-  }
+  useEffect(() => {
+    updateBookCount();
+  });
 
   const observer = useRef();
   const lastBookElementRef = useCallback(
@@ -56,42 +60,35 @@ export default function App() {
         setTotalCount={setTotalCount}
       />
 
-      {/* Author Filter Input*/}
-      <div>
-        <div className="flex justify-center items-center p-[1rem]">
-          <div className="flex max-w-[500px] justify-center items-center gap-[1rem]">
-            Author{" "}
-            <input
-              spellCheck="false"
-              className="block w-full appearance-none rounded-lg transition-colors md:text-sm text-base leading-tight bg-white px-[0.8rem] py-[0.5rem] focus:outline-none text-black"
-              type="search"
-              placeholder="Search Author…"
-              onChange={handleAuthorQuery}
-            />
-          </div>
-        </div>
-      </div>
+      {/* Filter Input*/}
+      <Filters setAuthorQuery={setAuthorQuery} setDateQuery={setDateQuery} />
 
       {/* Showing book count */}
-      <div className="text-cardTextSecondary text-lg text-center p-[3rem]">
-        Showing <span className="font-bold">{totalCount}</span> books
-      </div>
+      <Count />
 
       {/* Rendering Cards from API */}
-      <div className="flex gap-[2rem] flex-wrap justify-center items-center p-[3rem] bg-bodyBg">
+      <div
+        id="books-container"
+        className="flex gap-[2rem] flex-wrap justify-center items-center p-[3rem] bg-bodyBg"
+      >
         {books.map((book, index) => {
           if (VerifyAuthor(book.authors, authorQuery) || authorQuery === "") {
-            return (
-              <Card
-                cardId={index}
-                key={`${index}${pageNumber}`}
-                title={book.title}
-                authors={book.authors}
-                coverId={book.coverId}
-                publishedDate={book.publishedDate}
-                amazonId={book.amazonId}
-              />
-            );
+            if (
+              VerifyPublishedDates(book.publishedDate, dateQuery) ||
+              dateQuery == ""
+            ) {
+              return (
+                <Card
+                  cardId={index}
+                  key={`${index}${pageNumber}`}
+                  title={book.title}
+                  authors={book.authors}
+                  coverId={book.coverId}
+                  publishedDate={book.publishedDate}
+                  amazonId={book.amazonId}
+                />
+              );
+            }
           }
         })}
       </div>
@@ -110,4 +107,13 @@ export default function App() {
       </div>
     </div>
   );
+}
+
+function updateBookCount() {
+  setInterval(() => {
+    try {
+      document.getElementById("books-count").innerHTML =
+        document.getElementById("books-container").childElementCount;
+    } catch {}
+  }, 1000);
 }

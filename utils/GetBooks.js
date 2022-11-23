@@ -33,6 +33,7 @@ export default function useBookSearch(query, pageNumber, setTotalCount) {
                   coverId: b.cover_i,
                   publishedDate: b.publish_date,
                   amazonId: b.id_amazon,
+                  seed: b.seed,
                 };
               }),
             ]),

@@ -1,11 +1,14 @@
 export default function VerifyPublishedDates(dates, dateQuery) {
   var found = false;
+  var displayDate = 0;
   try {
-    var d1 = new Date(dateQuery);
     dates.map((date) => {
-      var d2 = new Date(date);
-      if (d1.getFullYear() === d2.getFullYear()) found = true;
+      var d1 = new Date(date);
+      if (d1.getFullYear() == dateQuery) {
+        found = true;
+        displayDate = d1;
+      }
     });
   } catch {}
-  return found;
+  return { found, displayDate };
 }

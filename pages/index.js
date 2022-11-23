@@ -3,9 +3,10 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 
 import Card from "/components/Card";
 import Count from "/components/Count";
-import GetBooks from "/utils/GetBooks";
 import Navbar from "/components/Navbar";
 import Filters from "/components/Filters";
+
+import GetBooks from "/utils/GetBooks";
 import VerifyAuthor from "/utils/verifyAuthor";
 import updateBookCount from "/utils/updateBookCount";
 import VerifyPublishedDates from "/utils/verifyPublishedDate";
@@ -52,21 +53,20 @@ export default function App() {
           content="BookRoom is a simple library management web app that is built around openlibrary api"
         />
       </Head>
-
       {/*  Navbar */}
-      <Navbar
+      <Navbar />
+      {/* Filter Input*/}
+      <Filters
+        setAuthorQuery={setAuthorQuery}
+        setDateQuery={setDateQuery}
         setPageNumber={setPageNumber}
         setQuery={setQuery}
         query={query}
         setTotalCount={setTotalCount}
       />
-
-      {/* Filter Input*/}
-      <Filters setAuthorQuery={setAuthorQuery} setDateQuery={setDateQuery} />
-
       {/* Showing book count */}
-      <Count />
-
+      <Count totalCount={totalCount} />
+      
       {/* Rendering Cards from API */}
       <div
         id="books-container"
@@ -75,7 +75,7 @@ export default function App() {
         {books.map((book, index) => {
           if (VerifyAuthor(book.authors, authorQuery) || authorQuery === "") {
             if (
-              VerifyPublishedDates(book.publishedDate, dateQuery) ||
+              VerifyPublishedDates(book.publishedDate, dateQuery).found ||
               dateQuery == ""
             ) {
               return (
@@ -87,6 +87,11 @@ export default function App() {
                   coverId={book.coverId}
                   publishedDate={book.publishedDate}
                   amazonId={book.amazonId}
+                  seed={book.seed}
+                  displayDate={
+                    VerifyPublishedDates(book.publishedDate, dateQuery)
+                      .displayDate
+                  }
                 />
               );
             }
